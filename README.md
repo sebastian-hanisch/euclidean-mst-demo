@@ -1,5 +1,7 @@
 # Euklidischer MST – Delaunay statt n² Kanten – Streamlit-Demo
 
+**[→ Demo live ausprobieren](https://sebastianhanisch-euclidean-mst-demo.streamlit.app/)**
+
 Viertes Stück der **Spannbaum-Reihe** der "Konzepte"-Reihe für die Website "Sebastian Hanisch – Operations Research und Machine Learning". Kruskal, Prim und Borůvka bekamen den Graphen als Kantenliste - bei dichten Graphen war genau sie das Problem (bei 160 Punkten 12 880 Kanten). Sind die Kosten aber **euklidisch** (Kante = Abstand), braucht man den vollständigen Graphen nicht: der minimale Spannbaum liegt schon in der **Delaunay-Triangulierung**, dem Netz aus Dreiecken, deren Umkreis keinen anderen Punkt enthält. Sie hat höchstens **3n − 3 − h** Kanten statt n(n−1)/2 (h = Punkte auf der konvexen Hülle), und es gilt **MST ⊆ RNG ⊆ Gabriel-Graph ⊆ Delaunay** (Shamos & Hoey 1975: EMST in O(n log n)). Die Demo baut die Triangulierung **von Hand** (Bowyer-Watson, numpy-frei im Kern, scipy nur in den Tests als Gegenprobe) und misst, **ab wann sich der Umweg lohnt**, was die drei Kandidatengraphen an Kanten sparen, **wann die Annahme "euklidisch" bricht**, was der MST mit **Single-Linkage-Clustering** zu tun hat und ob die Näherung über nächste Nachbarn in **hohen Dimensionen** trägt. Kruskal und Prim aus [kruskal-demo](../kruskal-demo) und [prim-demo](../prim-demo) laufen als Vergleich und Kontrollrechnung mit.
 
 **Einordnung in die Reihe:** geplant sind elf Stücke, dies ist das vierte:
