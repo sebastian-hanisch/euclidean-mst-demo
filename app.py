@@ -92,7 +92,7 @@ SHORT = {"prim_array": "Prim-Array", "kruskal_complete": "Kruskal", "delaunay_kr
 st.title("🔺 Euklidischer MST – Delaunay statt n² Kanten")
 st.markdown(
     """
-**Viertes Stück der Spannbaum-Reihe.** Kruskal, Prim und Borůvka bekamen den Graphen als Kantenliste - bei dichten Graphen war genau sie das Problem (bei 160 Punkten 12 880 Kanten). Sind die Kosten aber
+**Viertes Stück der Spannbaum-Reihe.** Kruskal, Prim und Borůvka bekamen den Graphen als Kantenliste - bei dichten Graphen war genau sie das Problem (bei 160 Punkten 12 720 Kanten). Sind die Kosten aber
 **euklidisch** (Kante = Abstand), braucht man den vollständigen Graphen nicht: der minimale Spannbaum liegt schon in der **Delaunay-Triangulierung** - dem Netz aus Dreiecken, deren Umkreis keinen anderen
 Punkt enthält. Sie hat höchstens **3n − 3 − h** Kanten statt n(n−1)/2 (h = Punkte auf der konvexen Hülle). Genauer gilt **MST ⊆ RNG ⊆ Gabriel-Graph ⊆ Delaunay**.
 
@@ -102,7 +102,7 @@ Hier wird gemessen, **ab wann sich der Umweg lohnt** (die Triangulierung muss ja
 )
 st.caption(
     "Setzt auf [kruskal-demo](https://github.com/sebastian-hanisch/kruskal-demo), [prim-demo](https://github.com/sebastian-hanisch/prim-demo) und [boruvka-demo](https://github.com/sebastian-hanisch/boruvka-demo) auf "
-    "(Kruskal und Prim laufen als Vergleich mit; die Triangulierung ist hier von Hand gebaut, scipy nur in den Tests). Geplante Nachfolger (nicht gebaut): Gerichteter Spannbaum, Grad-/Hop-beschränkter und "
+    "(Kruskal und Prim laufen als Vergleich mit; die Triangulierung ist hier von Hand gebaut, scipy nur in den Tests). Weitere Stücke der Reihe (alle gebaut): Gerichteter Spannbaum, Grad-/Hop-beschränkter und "
     "Kapazitierter MST, Steiner-Baum, Prize-Collecting Steiner-Baum, Sensitivität, zufällige Spannbäume."
 )
 
@@ -319,7 +319,7 @@ st.markdown(
     """
 | Annahme | Was passiert, wenn sie verletzt ist | Wer setzt an |
 |---|---|---|
-| **Die Triangulierung spart immer** | Erst ab n = 30 (Prim mit Array ist darunter billiger: n = 20: 551 gegen 685 Schritte); der Aufbau kostet 19 bis 35 Schritte je Punkt. Bei n = 300 ist Delaunay + Prim 8-fach billiger als das Array, Kruskal auf der vollständigen Liste 41-fach teurer. | - |
+| **Die Triangulierung spart immer** | Erst ab n = 30 (Prim mit Array ist darunter billiger: n = 20: 551 gegen 681 Schritte); der Aufbau kostet 19 bis 35 Schritte je Punkt. Bei n = 300 ist Delaunay + Prim 8-fach billiger als das Array, Kruskal auf der vollständigen Liste 41-fach teurer. | - |
 | **Elementarschritte sind Laufzeit** | Nein. Optimierte Bibliotheken (Qhull, CGAL) bauen die Triangulierung viel schneller als diese Python-Umsetzung; der Vergleich zählt Schritte einheitlich, nicht Sekunden. | Laufzeitmessung mit einer echten Bibliothek (nicht gebaut) |
 | **Kosten sind euklidisch** | Mit Geländezuschlag liegen MST-Kanten außerhalb der Triangulierung (n = 60, Zuschlag 0.4: in 52 % der Instanzen mindestens eine; Kostenaufschlag im Mittel 0.11 %, im schlimmsten Fall bei Zuschlag 0.8 2.33 %). | Nicht-euklidische Kandidatengraphen (nicht gebaut) |
 | **Gleiche Abstände sind harmlos** | Auf dem Gitter ist die Triangulierung nicht eindeutig (kozirkulare Punkte), Gabriel-Graph und Delaunay fast gleich; der Schlüssel (Kosten, Kantenindex) liefert trotzdem in allen Wegen denselben Baum. | - |
@@ -358,6 +358,6 @@ Implementiert in `emst_delaunay.py` (Bowyer-Watson von Hand), `emst_methods.py` 
 st.markdown("---")
 st.caption(
     "Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – "
-    "Operations Research und Machine Learning. Interesse an einer maßgeschneiderten Lösung für "
-    "Ihr Unternehmen? [Kontakt aufnehmen](https://sebastianhanisch.net/kontakt.html)"
+    "Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). "
+    "Mehr zur Reihe: [Spannbäume: vom Kruskal bis zum Zufallsbaum](https://sebastianhanisch.net/konzepte-spannbaum.html)."
 )

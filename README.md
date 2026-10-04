@@ -2,7 +2,7 @@
 
 **[→ Demo live ausprobieren](https://sebastianhanisch-euclidean-mst-demo.streamlit.app/)**
 
-Viertes Stück der **Spannbaum-Reihe** der "Konzepte"-Reihe für die Website "Sebastian Hanisch – Operations Research und Machine Learning". Kruskal, Prim und Borůvka bekamen den Graphen als Kantenliste - bei dichten Graphen war genau sie das Problem (bei 160 Punkten 12 880 Kanten). Sind die Kosten aber **euklidisch** (Kante = Abstand), braucht man den vollständigen Graphen nicht: der minimale Spannbaum liegt schon in der **Delaunay-Triangulierung**, dem Netz aus Dreiecken, deren Umkreis keinen anderen Punkt enthält. Sie hat höchstens **3n − 3 − h** Kanten statt n(n−1)/2 (h = Punkte auf der konvexen Hülle), und es gilt **MST ⊆ RNG ⊆ Gabriel-Graph ⊆ Delaunay** (Shamos & Hoey 1975: EMST in O(n log n)). Die Demo baut die Triangulierung **von Hand** (Bowyer-Watson, numpy-frei im Kern, scipy nur in den Tests als Gegenprobe) und misst, **ab wann sich der Umweg lohnt**, was die drei Kandidatengraphen an Kanten sparen, **wann die Annahme "euklidisch" bricht**, was der MST mit **Single-Linkage-Clustering** zu tun hat und ob die Näherung über nächste Nachbarn in **hohen Dimensionen** trägt. Kruskal und Prim aus [kruskal-demo](../kruskal-demo) und [prim-demo](../prim-demo) laufen als Vergleich und Kontrollrechnung mit.
+Viertes Stück der **Spannbaum-Reihe** der "Konzepte"-Reihe für die Website "Sebastian Hanisch – Operations Research und Machine Learning". Kruskal, Prim und Borůvka bekamen den Graphen als Kantenliste - bei dichten Graphen war genau sie das Problem (bei 160 Punkten 12 720 Kanten). Sind die Kosten aber **euklidisch** (Kante = Abstand), braucht man den vollständigen Graphen nicht: der minimale Spannbaum liegt schon in der **Delaunay-Triangulierung**, dem Netz aus Dreiecken, deren Umkreis keinen anderen Punkt enthält. Sie hat höchstens **3n − 3 − h** Kanten statt n(n−1)/2 (h = Punkte auf der konvexen Hülle), und es gilt **MST ⊆ RNG ⊆ Gabriel-Graph ⊆ Delaunay** (Shamos & Hoey 1975: EMST in O(n log n)). Die Demo baut die Triangulierung **von Hand** (Bowyer-Watson, numpy-frei im Kern, scipy nur in den Tests als Gegenprobe) und misst, **ab wann sich der Umweg lohnt**, was die drei Kandidatengraphen an Kanten sparen, **wann die Annahme "euklidisch" bricht**, was der MST mit **Single-Linkage-Clustering** zu tun hat und ob die Näherung über nächste Nachbarn in **hohen Dimensionen** trägt. Kruskal und Prim aus [kruskal-demo](../kruskal-demo) und [prim-demo](../prim-demo) laufen als Vergleich und Kontrollrechnung mit.
 
 **Einordnung in die Reihe:** geplant sind elf Stücke, dies ist das vierte:
 
@@ -11,11 +11,11 @@ Kruskal (Wurzel)                                                                
  ├─ Prim (Kontrast: wächst von einem Punkt)                                                [gebaut: prim-demo]
  ├─ Borůvka (Kontrast: alle Komponenten parallel)                                          [gebaut: boruvka-demo]
  ├─ Euklidischer MST (keine n²-Kantenliste, Delaunay)                                      [DIESES STÜCK]
- ├─ Gerichteter Spannbaum (Chu-Liu/Edmonds)                                                [nicht gebaut]
- ├─ Bottleneck-/Grad-/Hop-beschränkter Spannbaum → Kapazitierter MST                       [nicht gebaut]
- ├─ Steiner-Baum → Prize-Collecting Steiner-Baum                                           [nicht gebaut]
- ├─ MST-Sensitivität & dynamischer MST                                                     [nicht gebaut]
- └─ Zufällige Spannbäume & Kirchhoff                                                       [nicht gebaut]
+ ├─ Gerichteter Spannbaum (Chu-Liu/Edmonds)                                                [gebaut: arborescence-demo]
+ ├─ Bottleneck-/Grad-/Hop-beschränkter Spannbaum → Kapazitierter MST                       [gebaut: constrained-mst-demo, cmst-demo]
+ ├─ Steiner-Baum → Prize-Collecting Steiner-Baum                                           [gebaut: steiner-tree-demo, pcst-demo]
+ ├─ MST-Sensitivität & dynamischer MST                                                     [gebaut: mst-sensitivity-demo]
+ └─ Zufällige Spannbäume & Kirchhoff                                                       [gebaut: random-spanning-tree-demo]
 ```
 
 Ergebnis in Kürze: **Die Triangulierung lohnt sich ab etwa 30 Punkten - danach immer deutlicher (bei 300 Punkten 8-fach billiger als Prim mit Array, 41-fach billiger als Kruskal auf der vollständigen Liste) -, aber die Annahme "euklidisch" bricht schon bei kleinem Geländezuschlag, und die kNN-Näherung ist bei gleichverteilten Punkten nicht in hohen, sondern in niedrigen Dimensionen am schwächsten.** In **Elementarschritten** (Abstände, Vergleiche, Heap-Operationen, Orientierungs- und In-Circle-Tests, neue Dreiecke; ausdrücklich keine Laufzeit) braucht bei 60 Punkten Delaunay + Prim **2591**, Delaunay + Kruskal **3253**, Prim mit Array auf dem impliziten vollständigen Graphen **5251** und Kruskal auf der vollständigen Liste **19 206** Schritte. Der Baum ist immer derselbe, auch auf dem Gitter mit vielen gleichen Abständen.
@@ -76,7 +76,7 @@ Die einzelne Instanz weicht von den Medianen ab - die Mediane sind die belastbar
 - **Die Annahme "euklidisch" ist eng:** mit Geländezuschlag fehlen früh MST-Kanten (bei 0,4 in 52 % der Instanzen), der Kostenschaden bleibt aber klein; wer exakte Bäume braucht, muss dann auf einem größeren Kandidatengraphen arbeiten.
 - **Single-Linkage-Chaining:** der Schnitt trifft die Wolken nur bei getrennten Wolken (Reinheit 1,00 bei 2, 0,64 bei 8 Wolken); Ausreißer und Brücken verketten. Andere Linkage-Verfahren: agglomerative-demo.
 - **Gitter:** die Triangulierung ist nicht eindeutig (kozirkulare Punkte), Gabriel ist nicht in jeder Triangulierung enthalten; der Schlüssel (Kosten, Kantenindex) liefert trotzdem in allen Wegen denselben Baum.
-- **Nicht gebaut:** Divide-and-Conquer- oder Sweepline-Triangulierung (O(n log n) im schlechtesten Fall; hier inkrementell mit Walk), symbolische Punkte im Unendlichen (statt des großen Hilfsdreiecks), parallele EMST-Verfahren, FAMST und Verwandte (nur die Grundidee des kNN-Graphen), Euklidischer MST in hohen Dimensionen exakt; ebenso gerichtete Spannbäume, Nebenbedingungen, Steiner-Bäume, Sensitivität, Kirchhoff.
+- **Nicht gebaut:** Divide-and-Conquer- oder Sweepline-Triangulierung (O(n log n) im schlechtesten Fall; hier inkrementell mit Walk), symbolische Punkte im Unendlichen (statt des großen Hilfsdreiecks), parallele EMST-Verfahren, FAMST und Verwandte (nur die Grundidee des kNN-Graphen), Euklidischer MST in hohen Dimensionen exakt; gerichtete Spannbäume, Nebenbedingungen, Steiner-Bäume, Sensitivität und Kirchhoff sind eigene Stücke der Reihe (siehe oben).
 
 ## Verifikation
 
@@ -120,6 +120,4 @@ pytest tests/ -v
 
 ---
 
-Teil des [Operations-Research-Demo-Portfolios](https://sebastianhanisch.net/demos.html) von
-[Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning.
-Interesse an einer maßgeschneiderten Lösung? [Kontakt aufnehmen](https://sebastianhanisch.net/kontakt.html).
+Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). Mehr zur Reihe: [Spannbäume: vom Kruskal bis zum Zufallsbaum](https://sebastianhanisch.net/konzepte-spannbaum.html).
