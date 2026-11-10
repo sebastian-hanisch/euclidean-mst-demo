@@ -97,7 +97,7 @@ st.markdown(
 Punkt enthält. Sie hat höchstens **3n − 3 − h** Kanten statt n(n−1)/2 (h = Punkte auf der konvexen Hülle). Genauer gilt **MST ⊆ RNG ⊆ Gabriel-Graph ⊆ Delaunay**.
 
 Hier wird gemessen, **ab wann sich der Umweg lohnt** (die Triangulierung muss ja erst gebaut werden), was die drei Kandidatengraphen an Kanten sparen, **wann die Annahme "euklidisch" bricht**, was der MST mit
-**Single-Linkage-Clustering** zu tun hat - und ob die Näherung über nächste Nachbarn in **hohen Dimensionen** trägt, wo keine Triangulierung mehr geht. Aufwand in Elementarschritten, nicht in Laufzeit.
+**Single-Linkage-Clustering** zu tun hat - und ob die Näherung über nächste Nachbarn in **hohen Dimensionen** reicht, wo keine Triangulierung mehr geht. Aufwand in Elementarschritten, nicht in Laufzeit.
 """
 )
 st.caption(
